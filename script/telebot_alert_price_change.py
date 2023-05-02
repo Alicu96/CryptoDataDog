@@ -22,7 +22,6 @@ def check_price(pair):
     price, prev_15min_price, prev_1d_price = get_price(pair)
     perc_change_15min = (price-prev_15min_price)/prev_15min_price * 100
     perc_change_1d = (price-prev_1d_price)/prev_1d_price * 100
-    bot.send_message(chat_id=telegram_chat_id, text=f'check price finish, {pair}, {perc_change_15min}')
     # Check if the price change exceeds 1% in the last 5 minutes, 1 hour, or 1 day
     if abs(perc_change_15min) > 0.1 or abs(perc_change_1d) > 0.1:
         # Compose a message to send as an alert
@@ -34,7 +33,13 @@ def check_price(pair):
 
 
 # Define a loop to check the price change every 5 minutes
+counter_check_hearbeat = 0
 while True:
+    counter_check_hearbeat += 1
+    # echo mesage to notice that bot still alive, each 1 hour
+    if counter_check_hearbeat == 12:
+        bot.send_message(chat_id=telegram_chat_id, text='I am still alive')
+        counter_check_hearbeat = 0
     # Check the price change for each pair
     for pair in pairs:
         # Check the price change if the pair has an initial price
