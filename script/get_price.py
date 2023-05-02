@@ -3,8 +3,16 @@ import time
 
 exchange = ccxt.coinbasepro()
 
-while True:
-    ticker = exchange.fetch_ticker('BTC/USD')
+def get_price(coin_name, coin_ref='USD'):
+    pair = f'{coin_name}/{coin_ref}'
+    ticker = exchange.fetch_ticker(pair)
     price = ticker['last']
-    print(f"BTC price: ${price}")
-    time.sleep(300) # wait for 5 minutes
+    return price
+
+if __name__=='__main__':
+    import sys
+    coin_name = sys.argv[1]
+    price = get_price(coin_name=coin_name)
+    print(price)
+
+
